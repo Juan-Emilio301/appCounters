@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Big_Body</class>
+ <widget class="QWidget" name="Big_Body">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>620</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:qlineargradient(spread:pad, x1:0.460273, y1:0, x2:0.455, y2:1, stop:0 rgba(97, 165, 255, 255), stop:1 rgba(0, 0, 0, 255))</string>
+  </property>
+  <widget class="QLabel" name="Title_Bienvenido">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>30</y>
+     <width>200</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>BIZ UDGothic</family>
+     <pointsize>-1</pointsize>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(56, 116, 255);
+font-size:25px;
+color:rgb(255, 255, 255);
+border-radius: 20px;</string>
+   </property>
+   <property name="text">
+    <string>Bienvenido</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Image">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>110</y>
+     <width>371</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>5bc0a3d1d56cf3a676952f5f2c33a82d_370x140.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Iniciar_sesion_boton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>350</y>
+     <width>200</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>BIZ UDGothic</family>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(56, 116, 255);
+border-radius:20px;
+color:white;
+font-size:25px;</string>
+   </property>
+   <property name="text">
+    <string>Iniciar Sesion</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Registrarse_boton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>430</y>
+     <width>200</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>BIZ UDGothic</family>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(56, 116, 255);
+border-radius:20px;
+color:white;
+font-size:25px;</string>
+   </property>
+   <property name="text">
+    <string>Registrarse</string>
+   </property>
+  </widget>
+  <zorder>Title_Bienvenido</zorder>
+  <zorder>Iniciar_sesion_boton</zorder>
+  <zorder>Registrarse_boton</zorder>
+  <zorder>Image</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
