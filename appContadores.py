@@ -36,11 +36,13 @@ def IdLimpioFunc(idpass):
 ############################ Variable "global" la cual contiene la fecha del momento en el que es llamado
 tiempoHoy = datetime.date.today()
 
+ui_direccion = "C:/Users/Usuario/Desktop/Escritorio/Trabajo Programacion/App/UIs/"
+
 class  Presentacion(QDialog):
         def __init__(self):
             super(Presentacion,self).__init__()
             ############################ Cargamos la interfaz
-            loadUi("Presetacion.ui",self) 
+            loadUi(ui_direccion + "Presetacion.ui",self) 
             self.Registrarse_boton.clicked.connect(self.Registrarse)
             self.Iniciar_sesion_boton.clicked.connect(self.IniciarSesion)
         ############################ Funcion para cambiar de ventana a Registro
@@ -59,7 +61,7 @@ class Registrarse_Widgtet(QDialog):
         def __init__(self):
             super(Registrarse_Widgtet,self).__init__()
             ############################ Cargamos su interfaz
-            loadUi("Registro.ui",self) 
+            loadUi(ui_direccion + "Registro.ui",self) 
             ############################ Conectamos botones a las funciones correspondientes
             self.Ing_Boton.clicked.connect(self.IniciarSesion)
             self.Registrarse_boton.clicked.connect(self.CrearCuenta)
@@ -139,7 +141,7 @@ class Registrarse_Widgtet(QDialog):
 class Iniciar_Sesion_Widgtet(QDialog):
     def __init__(self):
         super(Iniciar_Sesion_Widgtet,self).__init__()
-        loadUi("Iniciar_Sesion.ui",self)
+        loadUi(ui_direccion + "Iniciar_Sesion.ui",self)
         self.Registrarse_boton.clicked.connect(self.Registrarse)
         self.Ing_Final.clicked.connect(self.Ing_Ver)
         self.Error_Label_Registro.hide()
@@ -197,7 +199,7 @@ class Iniciar_Sesion_Widgtet(QDialog):
 class Pantalla_Principal(QMainWindow):
     def __init__(self):
         super(Pantalla_Principal,self).__init__()
-        loadUi("MainTitle.ui", self)
+        loadUi(ui_direccion + "MainTitle.ui", self)
         ############################# Cargamos las personas en el "ComboBoxTipoPersona"
         listaTipoPersona = ["Fisica", "Juridica"]
         self.ComboBoxTipoPersona.addItems(listaTipoPersona)
@@ -310,7 +312,6 @@ class Pantalla_Principal(QMainWindow):
                 self.ClienteInsertadoLabel.hide()
     ############################ Funcion que se utiliza para crear datos en la cuenta corriente y editar los existentes
     def cuentaCorriente(self, devengadopass = 0, percibidopass = 0, idCLientepass = 0, accion = "CrearCliente"):
-        
         devengadoInt=int(devengadopass)
         percibidoInt=int(percibidopass)
         ############################ Creamos condicional para saber si debemos crear los datos del cliente o editarlos 
@@ -361,18 +362,26 @@ class Pantalla_Principal(QMainWindow):
         elif idCLientepass != 0 and percibidopass != 0 and accion == "PercibirCliente":
             try:
                 ############################ Tomamos los datos de "devengado" del cliente a traves del "id"
+                pago_afip = self.CuitCampTextBloq_2.text()
+                pago_ingresos_brutos = self.ClaveFiscalCampTextBloq_2.text()
+                afip_monotributo_autonomo = self.HonorarioBaseCampTextBloq_2.text()
+
                 myCursor.execute("SELECT Devengado FROM cuentacorriente WHERE idCliente = %s ",(idCLientepass,))
-                devengadoDB =IdLimpioFunc(myCursor.fetchone())
+                devengadoDB = IdLimpioFunc(myCursor.fetchone())
                 ############################ Calculamos la deuda nuevamente con los datos obtenidos
                 deudaRecalculada = devengadoDB-percibidoInt
                 ############################ Actualizamos los datos a insertar del cliente
-                editarDevengar = "UPDATE `cuentacorriente` SET `Percibido` = %s, `Total_Deuda` = %s, `Fecha` = %s WHERE idCliente = %s"
-                valoresEditar = (percibidoInt, deudaRecalculada, tiempoHoy, idCLientepass)
+                editarDevengar = "UPDATE `cuentacorriente` SET `Percibido` = %s, `Total_Deuda` = %s, `Fecha` = %s, `Pago_Afip_Monotributo_Autonomo` = %s, `Ingresos_Brutos` =%s, `Pago_Afip_Ganancias` = %s WHERE idCliente = %s"
+                valoresEditar = (percibidoInt, deudaRecalculada, tiempoHoy, pago_afip, pago_ingresos_brutos, afip_monotributo_autonomo,idCLientepass)
                 ############################ Insertamos los nuevos datos
                 myCursor.execute(editarDevengar, valoresEditar)
                 mydb.commit()
                 ############################ Limpiamos el "lineText" correspondiente y mostramos una etique que notifica la insercion
                 self.NombreCampTextBloq_2.clear()
+                self.CuitCampTextBloq_2.clear()
+                self.ClaveFiscalCampTextBloq_2.clear()
+                self.HonorarioBaseCampTextBloq_2.clear()
+                ############################ Mostramos la etiqueta que muestra la insercion
                 self.ClienteInsertadoLabel.show()
                 self.ClienteInsertadoLabel.setText("SE PERCIBIO CORRECTAMENTE")
                 ############################ Seteamos un loop para desaparecer la etiqueta antes mostrada
@@ -393,21 +402,18 @@ class Pantalla_Principal(QMainWindow):
 
     ############################
     def prepararPercibirCliente(self):
-        self.PrepararEditarCliente()
+        self.prepararContacto()
         self.MarcoClienteBloq.show()
         ############################
-        self.NombreCampTextBloq_2.setPlaceholderText("MONTO A PERCIBIR")
+        self.NombreCampTextBloq_2.setPlaceholderText("MONTO HONORARIO A PERCIBIR")
+        self.CuitCampTextBloq_2.setPlaceholderText("AFIP GANANCIAS")
+        self.ClaveFiscalCampTextBloq_2.setPlaceholderText("PAGO INGRESOS BRUTOS")
+        self.HonorarioBaseCampTextBloq_2.setPlaceholderText("AFIP/MONOTRIBUTO/AUTONOMO")
         ############################
         self.PercibirClieteBotonForm_2.show()
         ############################
-        self.ComboBoxTipoPersona.hide()
-        self.CuitCampTextBloq_2.hide()
-        self.ClaveFiscalCampTextBloq_2.hide()
-        self.ComboBoxCondicionFrenteFisco.hide()
-        self.ComboBoxRecursos.hide()
-        self.ComboBoxActividadCliente.hide()
-        self.HonorarioBaseCampTextBloq_2.hide()
-    ############################
+        self.BotonDatosDeContacto_State2.hide()
+
     def IniciarSesion(self):
         Pres = Presentacion()
         widget.addWidget(Pres)
@@ -448,6 +454,9 @@ class Pantalla_Principal(QMainWindow):
         TablaElegida=self.ComboBoxTablasElegir.currentText()
         ############################ Cambiamos la tabla en funcion de la que se eligio
         if TablaElegida == "Cuenta Corriente":
+            ############################ Modificamos el tamano de la tabla
+            self.TablaClientes.resize(850, 531)
+            self.TablaClientes.move(0, 140)
             ############################ Agregamos otra columna
             self.TablaClientes.setColumnCount(6)
             ############################ Cambiamos el tamaño de la primera columna
@@ -461,6 +470,9 @@ class Pantalla_Principal(QMainWindow):
             self.TablaClientes.setHorizontalHeaderItem(5, Titulo_TotalPercibido)
 
         elif TablaElegida == "Cliente":
+            ############################ Modificamos el tamano de la tabla
+            self.TablaClientes.resize(731, 531)
+            self.TablaClientes.move(110, 140)
             ############################ Restablecemos la cantidad de columnas
             self.TablaClientes.setColumnCount(5)
             ############################ Cambiamos el tamaño de la primera columna
@@ -540,7 +552,7 @@ class Pantalla_Principal(QMainWindow):
                 self.NombreCampTextBloq_2.setText(x[0])
                 self.CuitCampTextBloq_2.setText(x[1])
                 self.ClaveFiscalCampTextBloq_2.setText(x[2])
-                self.HonorarioBaseCampTextBloq_2.setText(x[3])
+                self.HonorarioBaseCampTextBloq_2.setText(str(x[3]))
 
     def EnviarEdicion(self):
         ############################ Convertimos los tipos de datos y definimos las variables
