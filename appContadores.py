@@ -115,7 +115,7 @@ class Registrarse_Widgtet(QDialog):
                         widget.addWidget(inicairSesion)
                         widget.setCurrentIndex(widget.currentIndex()+1)
                     except:
-                        print(EnvironmentError)
+                        print("Error en CrearCuenta")
                 elif Contrasena != ConfirmarContra:
                     self.Error_Label_Registro.show()
                     self.Error_Label_Registro.setText("LAS CONTRASEÑAS DEBEN SER IGUALES")
@@ -371,7 +371,7 @@ class Pantalla_Principal(QMainWindow):
                 ############################ Calculamos la deuda nuevamente con los datos obtenidos
                 deudaRecalculada = devengadoDB-percibidoInt
                 ############################ Actualizamos los datos a insertar del cliente
-                editarDevengar = "UPDATE `cuentacorriente` SET `Percibido` = %s, `Total_Deuda` = %s, `Fecha` = %s, `Pago_Afip_Monotributo_Autonomo` = %s, `Ingresos_Brutos` =%s, `Pago_Afip_Ganancias` = %s WHERE idCliente = %s"
+                editarDevengar = "UPDATE `cuentacorriente` SET `Percibido` = %s, `Total_Deuda` = %s, `Fecha` = %s, `Pago_Afip_Monotributo_Autonomo` = %s, `Ingresos_Brutos` = %s, `Pago_Afip_Ganancias` = %s WHERE idCliente = %s"
                 valoresEditar = (percibidoInt, deudaRecalculada, tiempoHoy, pago_afip, pago_ingresos_brutos, afip_monotributo_autonomo,idCLientepass)
                 ############################ Insertamos los nuevos datos
                 myCursor.execute(editarDevengar, valoresEditar)
